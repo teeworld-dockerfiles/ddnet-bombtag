@@ -13,11 +13,8 @@ RUN apk add --no-cache \
         ninja \
         python3 \
         sqlite-dev
-COPY ./modes/ddnet-bombtag /tw/sources
-COPY scripts/* /usr/local/bin
-# Set max ECON clients
-ARG ECON_CLIENTS
-RUN /bin/sh /usr/local/bin/patches.sh
+COPY . /tw/sources
+
 WORKDIR /tw/build
 RUN cmake /tw/sources \
         -Wno-dev \
