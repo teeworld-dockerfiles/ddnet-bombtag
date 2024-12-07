@@ -6,6 +6,7 @@ on:
     - master
     - dev
 
+
 jobs:
   build-push:
     name: Build docker image
@@ -15,7 +16,7 @@ jobs:
     - name: "Set current date as env variable"
       run: |
         echo "builddate=$(date +'%Y.%m.%d')" >> $GITHUB_OUTPUT
-      id: version  # this is used on variable path
+      id: version
 
     - name: Check out the repo
       uses: actions/checkout@v4
@@ -30,10 +31,12 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
+    - name: Debug Tag
+      run: echo "Tag: ${{ secrets.DOCKER_REGISTRY }}/teeworlds/bombtag:${{ steps.version.outputs.builddate }}"
+
     - name: Build and push
       uses: docker/build-push-action@v6
       with:
         context: .
         push: true
         tags: ${{ secrets.DOCKER_REGISTRY }}/teeworlds/bombtag:${{ steps.version.outputs.builddate }}
-        labels: ${{ steps.meta.outputs.labels }}
